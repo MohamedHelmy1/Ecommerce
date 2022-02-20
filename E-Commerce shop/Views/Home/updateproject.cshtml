@@ -1,0 +1,337 @@
+﻿
+@{
+    ViewBag.Title = "Update Product";
+    Layout = "~/Views/Shared/_AdminPage.cshtml";
+}
+
+<h2>Updateproject</h2>
+
+<div class="modal-body">
+    <form id="prodect">
+        <div class="row">
+            <div class="form-group  col-sm-12 col-md-6">
+                <div class="input-group ">
+                    <label style="color: darkgray" class="control-label">Prodect Name</label>
+
+                </div>
+                <div class="input-group ">
+
+                    <input class="form-control " type="text" id="txtprodectname" placeholder=" ProdectName" required />
+                </div>
+
+
+            </div>
+            <div class="form-group  col-sm-12 col-md-6">
+                <div class="input-group ">
+                    <label style="color: darkgray" class="control-label">Catogorey Name</label>
+
+                </div>
+                <div class="input-group ">
+
+                    <select class="form-control" id="ddlCategrey" required>
+                        <option></option>
+                    </select>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group  col-sm-12 col-md-6">
+                <div class="input-group ">
+                    <label style="color: darkgray" class="control-label">Quantity</label>
+
+                </div>
+                <div class="input-group ">
+
+                    <input class="form-control " type="number" id="txtQuantity" placeholder=" Quantity" required />
+                </div>
+
+
+            </div>
+            <div class="form-group  col-sm-12 col-md-6">
+                <div class="input-group ">
+                    <label style="color: darkgray" class="control-label"> Prise</label>
+
+                </div>
+                <div class="input-group ">
+
+                    <input class="form-control " type="number" id="txtprise" placeholder=" Prise" required />
+
+                </div>
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group  col-sm-12 col-md-6">
+                <div class="input-group ">
+                    <label style="color: darkgray" class="control-label"> New Prodect Image</label>
+
+                </div>
+                <div class="input-group ">
+
+                    <input class="form-control " type="file" id="Image" placeholder=" Image" />
+                </div>
+
+
+            </div>
+            <div class="form-group  col-sm-12 col-md-6">
+                <div class="input-group ">
+                    <label style="color: darkgray" class="control-label"> IsFeatured</label>
+
+                </div>
+                <div class="input-group ">
+
+                    <select class="form-control" id="IsFeatured" required>
+                        <option selected value="-1">Select IsFeatured</option>
+                        <option value="true">New</option>
+                        <option value="false">Old</option>
+                    </select>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div id="image" class="form-group  col-sm-12 col-md-6">
+
+                <label style="color: darkgray" class="control-label">Prodect Image</label>
+
+
+
+            </div>
+            <div class="form-group  col-sm-12 col-md-6">
+                <div class="input-group ">
+                    <label style="color: darkgray" class="control-label">IsActive</label>
+
+                </div>
+                <div class="input-group ">
+                    <input value="false" type="checkbox" id="IsActive" />
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="form-group  col-sm-12 col-md-12">
+                <div class="input-group ">
+                    <label style="color: darkgray" class="control-label">Description</label>
+
+                </div>
+                <div class="input-group ">
+
+                    <textarea class="form-control " id="Description" placeholder=" Description" required></textarea>
+                </div>
+
+
+            </div>
+
+        </div>
+        <input class="btn btn-info form-control" type="submit" value="Update" id="updateprodect">
+    </form>
+
+
+
+
+    <input type="hidden" class="hdnID" value="@ViewBag.prodect" />
+</div>
+<script>
+    $(document).ready(function () {
+        //IsActive
+        $('#IsActive').change(function () {
+            if ($('#IsActive').val() == "false") {
+                $('#IsActive').val(true);
+                alert($('#IsActive').val())
+
+            }
+            else {
+                $('#IsActive').val(false);
+                alert($('#IsActive').val())
+
+            }
+
+        })
+        Catogorey();
+        Updateprodect();
+        $('#updateprodect').click(function () {
+            var prodectname = $('#txtprodectname').val();
+            var Categrey = $('#ddlCategrey').val();
+            var Quantity = $('#txtQuantity').val();
+            var prise = $('#txtprise').val();
+
+
+            var data = new FormData();
+            var files = $("#Image").get(0).files;
+            data.append("Image", files[0]);
+
+            var IsFeatured = $('#IsFeatured').val();
+
+            var Description = $('#Description').val();
+
+
+            if (prodectname != "" || Categrey != -1 || Quantity != "" || prise != ""
+                || IsFeatured != -1 || Description != "") {
+                UpdatesPpoject();
+                return false;
+            }
+        });
+
+    })
+    function Catogorey() {
+        $.ajax({
+            url: "/Home/AllCatogrey",
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                var html = '<option value=-1 >Select a RoomType</option>';
+
+                $.each(result, function (key, item) {
+                    html += '<option value=' + item.CategoryId + ' >';
+                    html += item.CategoryName;
+                    html += '</option>';
+                });
+                $('#ddlCategrey').html(html);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+    function Updateprodect() {
+
+        var id = $(".hdnID").val();
+
+
+        $.ajax({
+            url: "/Home/Updateprodects?id=" + id,
+            type: "Get",
+            contenttype: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+
+                var html = '';
+
+                    $("#txtprodectname").val(result.ProductName);
+
+                    $("#IsActive").val(result.IsActive);
+                    if (result.IsActive == true) {
+                        $('#IsActive').prop('checked', true);
+                    }
+                    $("#Description").val(result.Description);
+
+
+                    if (result.IsFeatured == true) {
+                        $("#IsFeatured").val("true").change();
+                    }
+                    else {
+                        $("#IsFeatured").val("false").change();
+                    }
+                    $("#txtprise").val(result.price);
+
+                    $("#ProductImage").val(result.ProductImage);
+                $("#txtQuantity").val(result.Quantity);
+                $("#ddlCategrey").val(result.CategoryId);
+
+                html += '<img style="width: 100%;" src="/image/product image/' + result.ProductImage + '" />';
+
+
+
+
+
+
+                $('#image').append(html);
+            }
+
+        });
+
+
+    }
+    function UpdatesPpoject() {
+
+        var formData = new FormData();
+        var files = $("#Image").get(0).files;
+        formData.append("ProdectImage", files[0]);
+        formData.append("ProductName", $('#txtprodectname').val());
+        formData.append("CategoryId", $('#ddlCategrey').val());
+        formData.append("Quantity", $('#txtQuantity').val());
+        formData.append("price", $('#txtprise').val());
+        formData.append("IsFeatured", $('#IsFeatured').val());
+        formData.append("Description", $('#Description').val());
+        formData.append("ProductId", $('.hdnID').val());
+        formData.append("IsActive", $('#IsActive').val());
+
+        var prodectname = $('#txtprodectname').val();
+        var Categrey = $('#ddlCategrey').val();
+        var Quantity = $('#txtQuantity').val();
+        var prise = $('#txtprise').val();
+
+
+        var data = new FormData();
+        var files = $("#Image").get(0).files;
+        data.append("Image", files[0]);
+
+        var IsFeatured = $('#IsFeatured').val();
+
+        var Description = $('#Description').val();
+
+
+        if (prodectname != "" || Categrey != -1 || Quantity != "" || prise != ""
+            || IsFeatured != -1 || Description != "") {
+
+            $.ajax({
+                url: "/Home/UpdateaProdect",
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result == true) {
+
+                        swal({
+                            title: "Saved Successful",
+
+                            icon: "success",
+
+                            timer: 2000
+                        });
+                        window.location.href = "prodects";
+
+                    }
+                    else {
+
+
+                        swal({
+                            title: "Saved Failed",
+
+                            icon: "error",
+
+                            timer: 2000
+                        });
+                    }
+
+                }
+
+            });
+
+            return false;
+
+        }
+        else {
+            return true;
+        }
+
+
+
+
+
+
+    }
+
+</script>

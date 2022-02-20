@@ -1,0 +1,166 @@
+﻿
+@{
+    ViewBag.Title = "product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #NotFound {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 50px;
+        /* size: 80px; */
+        margin-bottom: 50px;
+        color: burlywood;
+    }
+
+    #pills-tab {
+        font-size: 20px;
+        margin-top: 20px;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h2>Search <small style="color: #337ab7">/Product Name</small></h2>
+
+        </div>
+
+    </div>
+
+
+</div>
+<input style="max-width: 100%;" class="form-control " type="text" id="search" placeholder="   Search" />
+<input style="max-width: 100%;" class="form-control " type="text" id="search1" placeholder="   Search" />
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h2>choose <small style="color: #337ab7">catogorey</small></h2>
+
+        </div>
+
+    </div>
+
+
+</div>
+<div style="text-align:center">
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    </ul>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h2>Our Producrs <small style="color: #337ab7">Trends Products</small></h2>
+        </div>
+    </div>
+</div>
+
+<div class="row product-container tbody">
+
+
+</div>
+
+
+@Html.Partial("_pagintion")
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="~/js/Home page Jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".home").removeClass("active");
+        $(".product").addClass("active");
+        $("#search1").on("keyup", function () {
+
+            Product(1);
+
+
+        });
+        $('#search1').hide();
+        $('.hide1').hide();
+        GetAllCatogrey()
+    })
+    function GetAllCatogrey() {
+
+
+        $.ajax({
+            url: "/Home/AllCatogrey",
+            type: "Get",
+            contenttype: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                var html = '';
+                var i = 1;
+                $.each(result, function (key, item) {
+                    if (i == 1) {
+                        html += '<li class="nav-item">';
+                        html += '<a onclick=Product(' + item.CategoryId + ') class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">' + item.CategoryName + '</a>';
+                        html += '</li>';
+                    }
+                    else {
+                        html += '<li class="nav-item">';
+                        html += '<a onclick=Product(' + item.CategoryId + ') class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="false">' + item.CategoryName + '</a>';
+                        html += '</li>';
+
+                    }
+                    i++
+
+                });
+                $('#pills-tab').html(html);
+
+            }
+
+        });
+    }
+    function Product(id, pageNum, pageSize) {
+        $('#search').hide();
+        $('#search1').show();
+        var search = $("#search1").val();
+        //After every trigger remove previous data and paging
+        $("#paged").empty();
+        $.getJSON("/Home/AllProdects?search=" + search + "&catogoryid=" + id, { pageNumber: pageNum, pageSize: pageSize }, function (result) {
+            var html = '';
+
+
+
+
+            if (result.Data.length <= 0) {
+
+                html += ' <div id="NotFound" >No Product For this catogorey</div>';
+                $('#paged').hide();
+            } else {
+                $('#paged').show();
+            }
+            $.each(result.Data, function (key, item) {
+
+                html += ' <div class="col-md-3 col-sm-6 col-xs-12" style="margin-bottom:8px">';
+                html += ' <div class="thumbnail product-item" style="height:300px">';
+                html += ' <img class="img-responsive" title="Click to View Product detail" style = "cursor:pointer;height:160px;width:100%" src="/image/product image/' + item.ProductImage + '" />';
+                html += '<div class="caption">';
+                html += '<h5>' + item.ProductName + '</h5>';
+                html += '<p>' + item.price + '$' + '</p>';
+
+                if (item.Quantity == 0) {
+                    html += '<p> UnAvailable </p>';
+                }
+                else {
+                    html += '<button  onclick=AddToCard(' + item.ProductId + ') class="pull-right"><i class="fa fa-shopping-cart"></i></button>';
+
+                    html += '<p> Available </p>';
+                }
+                html += '<div class="product-item-badge">' + item.IsFeature + '</div>';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+
+
+            });
+            $('.tbody').html(html);
+            PaggingTemplate(result.TotalPages, result.CurrentPage);
+        });
+    }
+        //This is paging temlpate ,you should just copy paste
+</script>

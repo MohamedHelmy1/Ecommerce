@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "ShopDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/CSS/cart.css" rel="stylesheet" />
+
+<div class="container">
+    <div id="Detail" class="card-body">
+        <h2 class="title">Check Out Detail</h2>
+        <form>
+            <div class="form-group">
+                <input id="Adress" class="form-control" type="text" placeholder="Address" name="name">
+                <small id="AdressError" style="display:none" class="text-danger error">Address is Requierd</small>
+            </div>
+            <div class="form-group">
+                <input id="Phone" class="form-control" type="text" placeholder="رقم التليفون" name="name">
+                <small id="PhoneError" style="display:none" class="text-danger error">Phone is Requierd</small>
+                <small id="PhoneError2" style="display:none" class="text-danger error">Phone must be 11 Number</small>
+            </div>
+            <div class="form-group">
+                <input id="City" class="form-control" type="text" placeholder="City" name="name">
+                <small id="CityError" style="display:none" class="text-danger error">City is Requierd</small>
+
+
+            </div>
+
+
+
+            <div class="p-t-20 text-center">
+                <button id="CheckOut" class="btn btn-primary buyDone" type="button">Check Out</button>
+            </div>
+        </form>
+    </div>
+
+
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+
+
+
+        $("#CheckOut").click(function () {
+
+            ChrckOut();
+        })
+    })
+    function ChrckOut() {
+
+        var Adress = $("#Adress").val();
+        var Phone = $("#Phone").val();
+        var City = $("#City").val();
+        if (Adress == null || Adress == "") {
+            $("#AdressError").show();
+        } else if (Phone == null || Phone == "") {
+            $("#AdressError").hide();
+            $("#PhoneError").show();
+        } else if (Phone.length != 11) {
+            $("#PhoneError").hide();
+            $("#PhoneError2").show();
+        } else if (City == null || City == "") {
+            $("#PhoneError").hide();
+            $("#PhoneError2").hide();
+            $("#CityError").show();
+        }
+        else {
+            $("#CityError").hide();
+            $("#PhoneError2").hide();
+            $("#PhoneError").hide();
+            $("#AdressError").hide();
+            $.ajax({
+                url: "/Sales/MemberDetail?Adress=" + Adress + "&Phone=" + Phone + "&City=" + City,
+                type: "Get",
+                contenttype: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    swal("Thanks for your trust in us", "You will be contacted", "success", {
+                        buttons: "Go To Home Page",
+                    }).then((value) => {
+                        window.location.href = "/Home/Home";
+                    });
+                }
+
+            });
+        }
+    }
+</script>

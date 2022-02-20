@@ -1,0 +1,261 @@
+﻿
+@{
+    ViewBag.Title = "customerpage";
+    Layout = "~/Views/Shared/_AdminPage.cshtml";
+}
+<div class="container">
+    <div clase="row">
+        <div class="col col-sm-12 col-md-6">
+            <div class="form-group  @*col-sm-12 col-md-6*@">
+                <div class="input-group ">
+                    <label style="color: darkgray" class="control-label">Text Above slider Image</label>
+
+                </div>
+                <div class="input-group ">
+
+                    <input class="form-control " type="text" id="txtslider" placeholder="Text Above slider Image" required />
+                </div>
+
+
+            </div>
+            <div class="form-group  @*col-sm-12 col-md-6*@">
+                <div class="input-group ">
+                    <label style="color: darkgray" class="control-label">slider Image</label>
+
+                </div>
+                <div class="input-group ">
+
+                    <input class="form-control " type="file" id="Image" placeholder=" Image" />
+
+
+                </div>
+                <p style="color:red" id="p">Image is Requierd</p>
+                <br /><br />
+                <input class="form-control badge-primary  w-50" type="submit" id="buttom" value="Save" />
+                <input class="form-control badge-primary  w-50" type="submit" id="UpdateSlider" value="Update" />
+
+            </div>
+        </div>
+        <div id="updateImage" class="col col-sm-12 col-md-6">
+
+        </div>
+    </div>
+</div>
+
+
+<div class="table">
+    <table class="table-responsive-md col table-bordered " cellspacing="0">
+        <thead>
+            <tr>
+                <th>Sr. No.</th>
+                <th> Text Above Slider</th>
+                <th>Slider Image</th>
+
+                <th>Action</th>
+
+            </tr>
+        </thead>
+        <tbody class="tbody"></tbody>
+
+
+    </table>
+</div>
+<input type="hidden" id="hdnID" />
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script>
+        $(document).ready(function () {
+            $('#p').hide();
+            $('#UpdateSlider').hide();
+            $('#buttom').click(function () {
+                AddSlider();
+            });
+            $('#UpdateSlider').click(function () {
+                Updateslider();
+            });
+            GetSliderData();
+        })
+        function AddSlider() {
+
+            var text = $("#txtslider").val();
+            var formData = new FormData();
+            var files = $("#Image").get(0).files;
+            formData.append("image", files[0]);
+            formData.append("text", text);
+
+            if (files[0] == null || files[0] == "" || files[0] == "undefined") {
+
+                $('#p').show();
+            }
+            else {
+                $('#p').hide();
+                $.ajax({
+                    url: "/Admin/sliders",
+                    type: 'POST',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        alert("Slider is Add");
+                        if (result == true) {
+                            GetSliderData();
+                            clear();
+                        }
+                        else {
+                            alert(false)
+                        }
+
+                    }
+
+                });
+            }
+
+
+
+        }
+        function GetSliderData() {
+
+            $.ajax({
+                url: "/Admin/GetAllSliderData",
+                type: "Get",
+                contenttype: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+
+                    var html = '';
+                    var i = 1;
+                    $.each(result, function (key, item) {
+
+                        html += '<tr >';
+                        html += '<td>' + i++ + '</td>';
+                        html += '<td>' + item.SlideTitle + '</td>';
+
+                        html += '<td ><img style="height: 70px;" src="/image/slider image/' + item.SlideImage + '"> </td>';
+
+
+
+                        html += '<td><a href="javascript:void(0);" onclick=Update(' + item.SlideId + '); return false;>' +
+                            '<i class="fa fa-edit" style="color: #7967e1;"></i><span style="color: #7967e1;">Update</span></a>' +
+                            '<a href="javascript:void(0);" onclick=Delet(' + item.SlideId + '); return false;> ' +
+                            '||<i class="fas fa-trash" style="color: red;"></i><span style="color: red;">Delete</span></a>'
+                            ;
+
+
+                        '</td> ';
+
+                        html += '</tr>';
+                    });
+                    $('.tbody').html(html);
+
+
+                }
+            });
+        }
+        //Update slider
+        function Update(id) {
+            $("#hdnID").val(id);
+
+            $.ajax({
+                url: "/Admin/Updateslider?id=" + id,
+                type: "Get",
+                contenttype: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+
+
+                    $.each(result, function (key, item) {
+                        $("#txtslider").val(item.SlideTitle);
+                        $('#updateImage').html('<img src="/image/slider image/' + item.SlideImage + '" alt="No Image" />')
+
+                    });
+                    $('#buttom').hide();
+                    $('#UpdateSlider').show();
+                    $('html, body').animate({
+                        scrollTop: $(".container-fluid").offset().top
+                    }, 2000);
+
+                }
+
+            });
+
+
+        }
+
+        function Updateslider() {
+
+            var id = $("#hdnID").val();
+            var text = $("#txtslider").val();
+            var formData = new FormData();
+            var files = $("#Image").get(0).files;
+            formData.append("SlideImag", files[0]);
+            formData.append("SlideTitle", text);
+            formData.append("SlideId", id);
+            $.ajax({
+                url: "/Admin/Updatesliders",
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result == "Success") {
+                        swal({
+                            title: "Update Successful",
+
+                            icon: "success",
+
+                            timer: 2000
+                        });
+                        GetSliderData();
+                        $('#buttom').show();
+                        $('#UpdateSlider').hide();
+                        clear();
+                    }
+                    else {
+                        swal({
+                            title: "Update Failed",
+
+                            icon: "error",
+
+                            timer: 2000
+                        });
+                    }
+
+                }
+            });
+
+
+
+        }
+        //Delete Slider
+        function Delet(id) {
+            $("#hdnID").val(id);
+
+            $.ajax({
+                url: "/Admin/Deleteslider?id=" + id,
+                type: "Get",
+                contenttype: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+
+
+                    alert(result);
+                    GetSliderData();
+
+
+                }
+
+            });
+
+
+        }
+        function clear() {
+            $("#txtslider").val("");
+            $("#Image").val("");
+            //$("#Image").get(0).files = null;
+        }
+</script>

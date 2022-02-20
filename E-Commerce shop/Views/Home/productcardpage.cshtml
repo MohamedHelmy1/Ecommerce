@@ -1,0 +1,270 @@
+﻿
+@{
+    ViewBag.Title = "productcardpage";
+}
+<link href="~/CSS/cart.css" rel="stylesheet" />
+<!-- cart -->
+<div class="cart-shopping">
+    <div class="container">
+        <h2 class="text-center">Your Cart</h2>
+        <div class="cart-inner">
+            <div class=" row">
+
+
+                <div style="margin-top:83px;min-height:250px;border: 1px solid #dddddde6;" class=" fail col-lg-9 col-md-9 col-sm-12">
+                    <table>
+                        <thead class="cart-head">
+                            <tr class="row">
+
+                                <th class="col-md-6"><h6>Product Name</h6></th>
+                                <th class="col-md-2"><h6>Price</h6></th>
+                                <th class="col-md-2"><h6>Quantity</h6></th>
+                                <th class="col-md-2"><h6>total</h6></th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="cart" class="cart-body "></tbody>
+
+
+                    </table>
+                </div>
+
+
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                    <div class="order-summary">
+                        <div class="order-head">
+                            <h4>Order Summary</h4>
+                        </div>
+                        <div class="order-body">
+                            <div class="subtotal">
+                                <p>Subtotal</p><p>
+                                    <span id="subtotalprice"></span>$
+                                </p>
+                            </div>
+                            <div class="shipping">
+                                <p>shipping</p>
+                                <p>Free</p>
+                            </div>
+                            <h6>Add Coupon Code <i class="fa fa-arrow-right"></i></h6>
+                        </div>
+                        <div class="order-footer">
+                            <div class="total-footer">
+                                <p>Total</p><p>
+                                    <span id="totalprice"></span>$
+                                </p>
+                            </div>
+                        </div>
+                        <button id="CheckOut" type="button">Check Out</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        LoadDataCarts();
+
+        $("#CheckOut").click(function () {
+            //var Orders = new Array();
+            $("#cart tr").each(function (i, tr) {
+                var productId = $(tr).find('td').eq(5).find('span').text();
+                var Quantity = $("#" + productId).val();
+                $.ajax({
+
+                    url: "/Sales/SaveOrder?id=" + productId + "&Quantity=" + Quantity,
+                    type: "POST",
+
+                    contenttype: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        if (result == "") {
+                            swal("Please Login To Continue","", "error", {
+                                buttons: "Login",
+                            }).then((value) => {
+                                window.location.href = "/Login/login"
+                            });
+
+                        }
+                        else {
+                            window.location.href = "/Sales/ShopDetail"
+                        }
+
+
+                    }
+
+                });
+                //alert(Quantity)
+                //var Card = {};
+
+                //Card.ProductId = productId;
+
+                //Card.Quantity = Quantity;
+                //Orders.push(Card);
+
+            });
+
+
+
+        })
+    })
+    //Load Data function in Table
+    function LoadDataCarts() {
+
+        var total = Number(0);
+        $.ajax({
+            url: "/Home/cardpage",
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result == 1) {
+
+                    $('.fail').html(' <div style="text-align:center;margin-top: 70px;" >' + '<h3 style="color: #6c757d">No Product In Cart</h3>' +'<br /><br /> <a style="background-color: #fe4365" href="/Home/Home" class="btn btn-primary px-5 mt-4">Go To Add Product</a></div >')
+                } else {
+                    var html = '';
+                    $.each(result, function (key, item) {
+                        html += '<br><tr class="product row" >';
+
+                        html += '<td class="col-md-6"><img style="height: 70px;" src="/image/product image/' + item.prodect.ProductImage + '"><h6>' + item.prodect.ProductName + '</h6> </td>';
+                        html += '<td class="col-md-2">' + '<p ><span id="A' + item.prodect.ProductId + '">' + item.prodect.price + '</span>$ </p>' + '</td>';
+                        html += '<td class="col-md-2">' + '<div class="control-quntity">' +
+                            '<input onclick=plus(' + item.prodect.ProductId + ') type="button"value="+"/>' +
+                            '<input onkeyup= putQuntityofProduct(' + item.prodect.ProductId + ') style="with=35px" id="' + item.prodect.ProductId + '" type="text" value="1">' +
+                            '<input onclick=Subtract(' + item.prodect.ProductId + ') type="button"value="-"/>' +
+                            '</div>' + '</td>';
+                        html += '<td class="col-md-2">' + '<p ><span id="B' + item.prodect.ProductId + '">' + item.prodect.price + '</span>$ </p>' + '</td>';
+                        html += '<td class="col-md-2">' + '<div class="close">' +
+                            '<span onclick="Deletefromcard(' + item.prodect.ProductId + ')">&times;</span>' +
+                            '</div>' + '</td>';
+
+                        html +='<td class="hidden"><span>'+item.prodect.ProductId+'</span> </td>';
+
+                        html += '</tr>';
+                        total = total + Number(item.prodect.price);
+                    });
+                    $('#cart').html(html);
+                    $('#subtotalprice').text(total);
+                    $('#totalprice').text(total);
+                }
+
+            }
+        });
+    }
+    //plus maney of product
+    function putQuntityofProduct(id) {
+        var x = $("#" + id).val();
+        if (x<1) {
+            x = x * -1;
+            $("#" + id).val(x);
+        }
+        if (x==0) {
+            x = 1;
+            $("#" + id).val(x);
+        }
+        var y = $("#A" + id).text();
+
+        $("#B" + id).html(x * Number(y));
+        //totel
+        var sum = 0;
+        $("#cart tr").each(function (i, tr) {
+
+            sum += parseInt($(tr).find('td').eq(3).find('span').text());
+        });
+        $('#subtotalprice').text(sum);
+        $('#totalprice').text(sum);
+    }
+    function plus(id) {
+
+        var x = $("#"+id).val();
+        x++;
+        $("#" + id).val(x);
+        var y = $("#A" + id).text();
+
+        $("#B" + id).html(x * Number(y));
+        //total
+        var tatal = $('#subtotalprice').text();
+
+        tatal = Number(y) + Number(tatal);
+         $('#subtotalprice').text(tatal);
+        $('#totalprice').text(tatal);
+
+
+
+    }
+    //Subtract
+    function Subtract(id) {
+        var x = $("#" + id).val();
+        if (x<=1) {
+
+        }
+        else {
+            x--;
+            $("#" + id).val(x);
+            var y = $("#A" + id).text();
+
+
+            $("#B" + id).html(x * Number(y));
+            //total
+            var tatal = $('#subtotalprice').text();
+
+            tatal = Number(tatal) - Number(y) ;
+            $('#subtotalprice').text(tatal);
+            $('#totalprice').text(tatal);
+        }
+
+
+    }
+
+
+    function Deletefromcard(id) {
+
+        $.ajax({
+            url: "/Home/removeproduct?productid=" + id,
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                var html = '';
+                var i = 0;
+
+                $.each(result, function (key, item) {
+                    i++
+                    html += '<li class="divider" ></li >';
+                    html += ' <li style="padding: 0px 10px;">' + item.prodect.ProductName + ' <i  onclick=Deletefromcard(' + item.prodect.ProductId + ') style="float: right; margin - right: 15px;color: red;" class="fa fa-times"></i></li>';
+
+                });
+                $('#Cartitem').html(html);
+                $('#numbercart').html(i);
+
+                //LoadDataCarts();
+                $("#cart tr").each(function (i, tr) {
+                    var productId = $(tr).find('td').eq(5).find('span').text();
+                    if (productId==id) {
+
+                        var tatal = $('#subtotalprice').html();
+                        //طرح السعر
+                        var y = $("#B" + productId).html();
+
+                        tatal = Number(tatal) - Number(y);
+                        $('#subtotalprice').text(tatal);
+                        $('#totalprice').text(tatal);
+                        //delet row
+                        $(this).remove();
+                    }
+                });
+
+            }
+
+
+
+
+        });
+    }
+
+
+</script>

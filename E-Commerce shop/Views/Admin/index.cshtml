@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "Order";
+    Layout = "~/Views/Shared/_AdminPage.cshtml";
+}
+<!DOCTYPE html>
+<style>
+    #view {
+        display: block;
+        text-align: center;
+        margin-left: 45%;
+        border-radius: 20px;
+        color: blueviolet;
+    }
+</style>
+
+<div class="1">
+
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        order();
+    });
+    function order() {
+        $.ajax({
+            url: "/Admin/Getorder",
+            type: "Get",
+            contenttype: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                var html = '';
+                var i = 1;
+                $.each(result, function (key, item) {
+                    html += '<div class="alert alert-primary" role="alert">';
+                    html += '<h6>CustomerName:' + item.Name + ' </h6 > ';
+                    html += ' <label> AmountPayed:<span style="color: black"> ' + item.AmountPayed + '</span>$</label > ';
+                    html += ' <label style="float: right;">  ' + item.time + '</label > ';
+                    html += '<a href="/Admin/OrdelDetail/' + item.id+'" onclick=Updateprodect(' + item.id + '); return false;><input id="view" type="button" value="See Order Detail" /></a> ';
+                    html += '</div>';
+                });
+                $('.1').append(html);
+
+            }
+
+        });
+    }
+</script>

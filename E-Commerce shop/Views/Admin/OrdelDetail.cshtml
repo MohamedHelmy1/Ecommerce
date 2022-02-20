@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "OrdelDetail";
+    Layout = "~/Views/Shared/_AdminPage.cshtml";
+}
+
+<input type="hidden" value="@ViewBag.OrderId " />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Image</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Countity</th>
+        </tr>
+    </thead>
+    <tbody class="tbody"></tbody>
+</table>
+<link href="~/CSS/cart.css" rel="stylesheet" />
+
+<div class="container">
+    <div id="Detail" class="card-body">
+        <h2 class="title">Customer Detail</h2>
+        <form>
+            <div class="form-group">
+                <label style="color: silver"><i>Customer Name</i></label>
+                <input id="name" class="form-control" type="text" placeholder="Customer Name" name="name" readonly>
+            </div>
+            <div class="form-group">
+                <label style="color: silver"><i>Amount payed</i></label>
+                <input id="Amountpayed" class="form-control" type="text" placeholder="Amount payed" name="name" readonly>
+            </div>
+            <div class="form-group">
+                <label style="color: silver"><i>Address</i></label>
+                <input id="Adress" class="form-control" type="text" placeholder="Address" name="name" readonly>
+            </div>
+            <div class="form-group">
+                <label style="color: silver"><i>Phone</i></label>
+                <input id="Phone" class="form-control" type="text" placeholder="Phone" name="name" readonly>
+            </div>
+            <div class="form-group">
+                <label style="color: silver"><i>City</i></label>
+                <input id="City" class="form-control" type="text" placeholder="City" name="name" readonly>
+
+            </div>
+
+
+
+
+        </form>
+    </div>
+
+
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        OrderDetail();
+        customerDetail();
+    });
+    function customerDetail() {
+        $.ajax({
+            url: "/Admin/customerDetail?id="+@ViewBag.OrderId,
+            type: "Get",
+            contenttype: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $.each(result, function (key, item) {
+                    $('#name').val(item.Customername);
+
+                    $('#Adress').val(item.Adress);
+                    $('#Phone').val(item.Phone);
+                    $('#City').val(item.City);
+                });
+            }
+        });
+    }
+    function OrderDetail() {
+        $.ajax({
+
+            url: "/Admin/OrderDetails?id=" + @ViewBag.OrderId ,
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                var html = '';
+                var i = 1;
+                var x = '';
+                $.each(result, function (key, item) {
+                    html += '<tr>';
+                    html += '<td>' + i++ + '</td>';
+                    html += '<td><img style="height: 70px;" src="/image/product image/' + item.image + '"></td>';
+                    html += '<td><h6>' + item.name + '</h6></td>';
+                    html += '<td>' + item.Quantity + '</td>';
+
+                    html += '</tr>';
+                     x += item.Amountpayed;
+                });
+                $('.tbody').html(html);
+                $('#Amountpayed').val(x);
+            }
+        });
+    }
+</script>

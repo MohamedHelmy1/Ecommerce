@@ -1,0 +1,57 @@
+﻿@using PagedList.Mvc;
+
+@using PagedList;
+@{
+    ViewBag.Title = "Home";
+}
+
+
+
+@*//////////////////////*@
+<div id="themeSlider" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+    </ol>
+    <div class="carousel-inner">
+
+    </div>
+    <a class="left carousel-control" href="#themeSlider" data-slide="prev">
+        <span class="fa fa-chevron-left"></span>
+    </a>
+    <a class="right carousel-control" href="#themeSlider" data-slide="next">
+        <span class="fa fa-chevron-right"></span>
+    </a>
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h2>Search <small style="color: #337ab7">/Product Name</small></h2>
+
+        </div>
+
+    </div>
+
+
+</div>
+<input style="max-width: 100%;" class="form-control " type="text" id="search" placeholder="   Search" />
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h2>Our Producrs <small style="color: #337ab7">Trends Products</small></h2>
+        </div>
+    </div>
+</div>
+
+<div class="row product-container tbody">
+
+
+</div>
+
+@Html.Partial("_pagintion")
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="~/js/Home page Jquery.js"></script>

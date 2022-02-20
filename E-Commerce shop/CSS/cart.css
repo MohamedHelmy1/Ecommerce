@@ -1,0 +1,236 @@
+﻿.cart-shopping {
+    /*position: relative;*/
+    top: 100px;
+}
+
+    .cart-shopping h2 {
+        font-size: 50px;
+        margin-bottom: 60px;
+        font-family: "Poppins", "Roboto";
+    }
+
+    .cart-shopping .cart-inner .cart-head {
+        padding: 50px 0 0;
+        border-bottom: 1px solid #ccc;
+    }
+
+        .cart-shopping .cart-inner .cart-head .col-md-6 h6 {
+            font-size: 23px;
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .cart-shopping .cart-inner .cart-head .col-md-2 h6 {
+            font-size: 20px;
+            text-transform: uppercase;
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+@media (max-width: 767px) {
+    .cart-shopping .cart-inner .cart-head {
+        display: none;
+    }
+}
+
+.cart-shopping .cart-inner .cart-body {
+    margin-top: 20px;
+}
+
+    .cart-shopping .cart-inner .cart-body .product {
+        position: relative;
+    }
+
+        .cart-shopping .cart-inner .cart-body .product .col-md-6 img {
+            width: 90px;
+        }
+
+@media (max-width: 767px) {
+    .cart-shopping .cart-inner .cart-body .product .col-md-6 img {
+        width: 100%;
+    }
+}
+
+.cart-shopping .cart-inner .cart-body .product .col-md-6 h6 {
+    display: inline-block;
+    margin-left: 25px;
+}
+
+.cart-shopping .cart-inner .cart-body .product .col-md-2 {
+    margin: 20px 0;
+}
+
+    .cart-shopping .cart-inner .cart-body .product .col-md-2 p {
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .cart-shopping .cart-inner .cart-body .product .col-md-2 button {
+        padding: 0 8px;
+        background-color: #ccc;
+        font-size: 16px;
+        outline: none;
+        border: 1px solid #000;
+        width: 25px;
+        height: 25px;
+    }
+
+        .cart-shopping .cart-inner .cart-body .product .col-md-2 button:hover {
+            border: 1px solid #00b9f1;
+            color: #00b9f1;
+        }
+
+    .cart-shopping .cart-inner .cart-body .product .col-md-2 input {
+        width: 35px;
+        outline: none;
+        border: 1px solid #000;
+        text-align: center;
+    }
+
+        .cart-shopping .cart-inner .cart-body .product .col-md-2 input:focus {
+            border: 1px solid #00b9f1;
+        }
+
+.cart-shopping .cart-inner .cart-body .product .close {
+    user-select: none;
+   
+    right: -10px;
+    top: 20px;
+    border: 1px solid #fe4365;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    text-align: center;
+    cursor: pointer;
+    opacity: 1;
+}
+
+    .cart-shopping .cart-inner .cart-body .product .close:hover {
+        border: 1px solid #00b9f1;
+    }
+
+        .cart-shopping .cart-inner .cart-body .product .close:hover span {
+            color: #00b9f1;
+        }
+
+    .cart-shopping .cart-inner .cart-body .product .close span {
+        line-height: 27px;
+        color: #fe4365;
+    }
+
+@media (max-width: 767px) {
+    .cart-shopping .cart-inner .cart-body .product {
+        margin-top: 30px;
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 13px;
+    }
+
+        .cart-shopping .cart-inner .cart-body .product img {
+            display: flex;
+            margin: auto;
+            width: 100%;
+        }
+
+        .cart-shopping .cart-inner .cart-body .product .title {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        .cart-shopping .cart-inner .cart-body .product .col-md-2 {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cart-shopping .cart-inner .cart-body .product .close {
+            top: 0;
+        }
+}
+
+@media (min-width: 768px) {
+    .cart-shopping .cart-inner .cart-body .product .title {
+        display: inline-block;
+    }
+
+        .cart-shopping .cart-inner .cart-body .product .title h5 {
+            display: none;
+        }
+
+    .cart-shopping .cart-inner .cart-body .product .col-md-2 .control-quntity {
+        display: flex;
+    }
+
+    .cart-shopping .cart-inner .cart-body .product .col-md-2 h5 {
+        display: none;
+    }
+}
+
+@media (min-width: 1200px) {
+    .cart-shopping .cart-inner .cart-body .product .col-md-2 .control-quntity {
+        display: block;
+    }
+}
+
+.cart-shopping .cart-inner .order-summary {
+    margin: 83px 5px;
+}
+
+    .cart-shopping .cart-inner .order-summary .order-head {
+        padding: 15px 12px;
+        background-color: #dddddde6;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    }
+
+        .cart-shopping .cart-inner .order-summary .order-head h4 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+    .cart-shopping .cart-inner .order-summary .order-body {
+        padding: 15px 12px;
+        background-color: #eae8e8ee;
+    }
+
+        .cart-shopping .cart-inner .order-summary .order-body .subtotal {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cart-shopping .cart-inner .order-summary .order-body .shipping {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cart-shopping .cart-inner .order-summary .order-body h6 {
+            color: #00b9f1;
+            cursor: pointer;
+        }
+
+    .cart-shopping .cart-inner .order-summary .order-footer {
+        padding: 15px 12px;
+        background-color: #dddddde6;
+        border-top: 1px solid rgba(0, 0, 0, 0.3);
+    }
+
+        .cart-shopping .cart-inner .order-summary .order-footer .total-footer {
+            display: flex;
+            justify-content: space-between;
+        }
+
+            .cart-shopping .cart-inner .order-summary .order-footer .total-footer p {
+                margin: 0;
+            }
+
+    .cart-shopping .cart-inner .order-summary button {
+        outline: none;
+        width: 100%;
+        margin-top: 8px;
+        padding: 10px;
+        border: none;
+        background-color: #fe4365;
+        color: #fff;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+        .cart-shopping .cart-inner .order-summary button:hover {
+            background-color: #43fe96;
+        }
+  

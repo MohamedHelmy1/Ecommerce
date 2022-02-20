@@ -1,0 +1,289 @@
+﻿
+@{
+    ViewBag.Title = "login";
+    Layout = null;
+}
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+<link href="~/CSS/login.css" rel="stylesheet" />
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<div style="margin: 15%; margin-top: 20%;" class="modal-content">
+    <div class="modal-header">
+
+        <h4 style="text-align: center;" class="modal-title" id="myModalLabel">
+            Login/Registration
+        </h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12" style="border-right: 1px dotted #C2C2C2;padding-right: 30px;">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#Login" data-toggle="tab">Login</a></li>
+                    <li><a href="#Registration" data-toggle="tab">Registration</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="Login">
+                        <form role="form" class="form-horizontal">
+                            <div class="form-group">
+                                <label for="email" class="col-sm-2 control-label">
+                                    Email
+                                </label>
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control" id="email1" placeholder="Email" required />
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Password1" class="col-sm-2 control-label">
+                                    Password
+                                </label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="Password1" placeholder="password" required />
+                                    <br />
+                                    <p id="empa" style="color:red;display:none"><b>Email or Passwors is Roung</b></p>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-2">
+                                </div>
+                                <div class="col-sm-10">
+                                    <input id="Login1" type="submit" value="Login" class="btn btn-primary ">
+
+
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="Registration">
+                        <form role="form" class="form-horizontal">
+                            <div class="form-group">
+                                <label for="email" class="col-sm-2 control-label">
+                                    Name
+                                </label>
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <select class="form-control">
+                                                <option>Mr.</option>
+                                                <option>Ms.</option>
+                                                <option>Mrs.</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input id="Firstname" type="text" class="form-control" placeholder=" First Name" required />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="LastName" class="col-sm-2 control-label">
+                                    Mobile
+                                </label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="LastName" placeholder="LastName" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="col-sm-2 control-label">
+                                    Email
+                                </label>
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control" id="email" placeholder="Email" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password" class="col-sm-2 control-label">
+                                    Password
+                                </label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="password" placeholder="Password" required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-2">
+                                </div>
+                                <div class="col-sm-10">
+                                    <input type="submit" id="register" class="btn btn-primary " value="Register">
+
+
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-12">
+                <hr style="border-top: 1px dashed #eee;" />
+                <div id="OR">
+                    OR
+                </div>
+                <div class="row text-center sign-with">
+                    <div class="col-md-12">
+                        <h3 style="margin-top: -20px;">
+                            Sign in with
+                        </h3>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="btn-group btn-group-justified">
+                            <div class="col-md-6">
+                                <a style="width:100%" href="#" class="btn btn-primary">Facebook</a>
+                            </div>
+                            <div class="col-md-6">
+                                <a style="width:100%" href="#" class="btn btn-danger">
+                                    Google
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#Login1").click(function () {
+
+            var email = $("#email1").val();
+            var passwoed = $("#Password1").val();
+            if (email != "" && email.includes("@@" && ".") && passwoed != "") {
+                Login();
+
+                return false;
+            }
+            else {
+                return true;
+            }
+
+        })
+        $("#register").click(function () {
+
+
+            var email = $("#email").val();
+            var FirstName = $("#FirstName").val();
+            var LastName = $("#LastName").val();
+            var passwored = $("#passwored").val();
+            if (email.includes("@@" && ".") && FirstName != "" && passwored != "" && LastName != "") {
+
+                Register();
+                return false;
+
+
+            }
+            else {
+
+                return true;
+            }
+
+
+        })
+    });
+
+    function Login() {
+        var email = $("#email1").val();
+        var passwoed = $("#Password1").val();
+
+        $.ajax({
+            url: "/Login/LoginMember?EmailId=" + email + "&Password=" + passwoed,
+            type: "Get",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+
+                if (result != "") {
+
+                    swal({
+                        title: "Login Successful",
+                        // text: "You clicked the button!",
+                        icon: "success",
+
+                        timer: 2000
+                    });
+
+                    if (result == 1) {
+                        window.location.href="/Home/Admin";
+                    } else {
+                        window.location.href="/Home/Home";
+                    }
+
+                }
+                else {
+
+                    $('#empa').show();
+                    swal({
+                        title: "login Failed",
+                        text: "Email or password is wrong!",
+                        icon: "error",
+                        button: "OK!",
+
+                    });
+
+                }
+
+
+            }
+        })
+    }
+    function Register() {
+
+        var email = $("#email").val();
+        var FirstName = $("#Firstname").val();
+        var LastName = $("#LastName").val();
+        var passwored = $("#password").val();
+        $.ajax({
+            url: "/Login/Register?FristName=" + FirstName + "&LastName=" + LastName + "&EmailId=" + email + "&Password=" + passwored,
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result == "success") {
+                    swal({
+                        title: "Register Successful",
+                        // text: "You clicked the button!",
+                        icon: "success",
+
+                        timer: 2000
+                    });
+
+                        window.location.href = "/Home/Home";
+
+
+                }
+                else {
+
+                    swal({
+                        title: "Register Failed",
+                        text: "Email or password is wrong!",
+                        icon: "error",
+                        button: "OK!",
+
+                    });
+
+                }
+            }
+
+
+        });
+        return false;
+    }
+</script>
+
+

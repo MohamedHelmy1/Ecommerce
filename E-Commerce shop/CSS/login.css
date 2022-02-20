@@ -1,0 +1,29 @@
+﻿
+body {
+    background-color: beige;
+}
+.nav-tabs {
+    margin-bottom: 15px;
+}
+
+.sign-with {
+    margin-top: 25px;
+    padding: 20px;
+}
+
+div#OR {
+    height: 30px;
+    width: 30px;
+    border: 1px solid #C2C2C2;
+    border-radius: 50%;
+    font-weight: bold;
+    line-height: 28px;
+    text-align: center;
+    font-size: 12px;
+    margin-left: 46%;
+    margin-top: -38px;
+    
+    top: 40%;
+    
+    background: #DFDFDF;
+}

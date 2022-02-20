@@ -1,0 +1,322 @@
+﻿
+@{
+    ViewBag.Title = "Catogrey";
+    Layout = "~/Views/Shared/_AdminPage.cshtml";
+}
+
+
+<!-- Add Catogrey-->
+
+<div class="modal fade" id="showmodel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1> Add Catogorey</h1>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+
+            </div>
+            <div class="modal-body">
+                <form id="catogrey">
+                    <div class="form-group col-lg-12 col">
+                        <div class="input-group ">
+                            <label style="color: darkgray" class="control-label">Catogery Name</label>
+
+                        </div>
+                        <div class="input-group ">
+
+                            <input class="form-control " type="text" id="name" placeholder=" CatogreyName" required />
+                        </div>
+
+
+
+
+                    </div>
+
+
+
+
+                </form>
+
+                <button class="btn btn-info form-control" type="submit" id="save"> Save </button>
+
+
+                <input type="hidden" id="hdnID" value="" />
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Update Catogrey-->
+<div class="modal fade" id="showmodeUpdate">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1> Update Catogorey</h1>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+
+            </div>
+            <div class="modal-body">
+                <form id="Updatecatogrey">
+                    <div class="form-group col-lg-12 col">
+                        <div class="input-group ">
+                            <label style="color: darkgray" class="control-label">Catogery Name</label>
+
+                        </div>
+                        <div class="input-group ">
+
+                            <input class="form-control " type="text" id="Catogreyname" placeholder=" CatogreyName" required />
+                        </div>
+                        <div class="input-group ">
+                            <label style="color: darkgray" class="control-label">IsActive</label>
+
+                        </div>
+                        <div class="input-group ">
+                            <input value="false" type="checkbox" id="IsActive" />
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+                </form>
+
+
+
+
+                <input type="hidden" id="hdnID" value="" />
+                <button class="btn btn-info form-control" type="submit" id="update"> Update </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumbs-->
+<!-- DataTables Example -->
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Category Details
+        <p id="1" style="float:right" class="btn badge-info">
+            <i class="fa fa-plus"></i>
+            Add New Catogrey
+        </p>
+    </div>
+    <div class="card-body">
+
+        <div class="table">
+            <table class="table-responsive-md col table-bordered" id="dataTable" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Category Name</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody class="tbody"></tbody>
+                <tfoot>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Category Name</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        //search
+
+        $("#search").on("keyup", function () {
+
+            var value = $(this).val().toLowerCase();
+
+                $(".tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+
+        //PopUp  Add Page
+        $('#1').click(function () {
+
+            $('#showmodel').modal('show');
+        });
+
+        //Add Catogorey
+        $("#save").click(function () {
+            AddCatogorey()
+        })
+        //IsActive
+        $('#IsActive').change(function () {
+            if ($('#IsActive').val() == "false") {
+                $('#IsActive').val(true);
+
+            }
+            else {
+                $('#IsActive').val(false);
+
+            }
+
+        })
+        $("#update").click(function () {
+            UpdateCatogrys();
+        })
+
+        //Get AllCatogry
+        GetAllCatogrey();
+    })
+    //Get AllCatogry
+    function GetAllCatogrey() {
+
+
+        $.ajax({
+            url: "/Home/AllCatogrey",
+            type: "Get",
+            contenttype: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                var html = '';
+                var i = 1;
+                $.each(result, function (key, item) {
+                    html += '<tr >';
+                    html += '<td>' + i++ + '</td>';
+                    html += '<td>' + item.CategoryName + '</td>';
+
+                    html += '<td><a href="javascript:void(0);" onclick=UpdateCatogry(' + item.CategoryId + '); return false;>' +
+                        '<i class="fa fa-edit" style="color: #7967e1;"></i><span style="color: #7967e1;">Update</span></a>';
+
+
+                    '</td> ';
+
+                    html += '</tr>';
+                });
+                $('.tbody').html(html);
+                $("#name").val("");
+            }
+
+        });
+    }
+    function AddCatogorey() {
+        var Name = $("#name").val();
+        if (Name != "") {
+            $.ajax({
+                url: "/Home/AddCatogrey?CategoryName=" + Name,
+                type: "Get",
+                contenttype: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result == "Success") {
+                        swal({
+                            title: "Saved Successful",
+
+                            icon: "success",
+
+                            timer: 2000
+                        });
+                        GetAllCatogrey()
+                    }
+                    else {
+                        swal({
+                            title: "Saved Failed",
+
+                            icon: "error",
+
+                            timer: 2000
+                        });
+                    }
+
+                }
+
+            });
+        }
+
+
+    }
+    //Update Catogery
+    function UpdateCatogry(id) {
+        $("#hdnID").val(id);
+        $('#showmodeUpdate').modal('show');
+        $.ajax({
+            url: "/Home/UpdateCatogreys?id=" + id,
+            type: "Get",
+            contenttype: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+
+
+                $.each(result, function (key, item) {
+                    $("#Catogreyname").val(item.CategoryName);
+                    $("#IsActive").val(item.IsActive);
+
+                    if (item.IsActive == true) {
+                        $('#IsActive').prop('checked', true);
+                    }
+
+
+
+                    $("#IsDelete").val(item.IsDelete);
+
+
+                });
+
+            }
+
+        });
+
+
+    }
+
+    function UpdateCatogrys() {
+
+        var id = $("#hdnID").val();
+        var IsActive = $("#IsActive").val();
+
+        var Name = $("#Catogreyname").val();
+        if (Name != "") {
+
+            $.ajax({
+                url: "/Home/UpdateCatogrey?CategoryName=" + Name + "&IsActive=" + IsActive +"&CategoryId="+id,
+                type: "Get",
+                contenttype: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result == "Success") {
+                        swal({
+                            title: "Saved Successful",
+
+                            icon: "success",
+
+                            timer: 2000
+                        });
+                        GetAllCatogrey()
+                        $('#showmodeUpdate').modal('hide');
+                    }
+                    else {
+                        swal({
+                            title: "Saved Failed",
+
+                            icon: "error",
+
+                            timer: 2000
+                        });
+                    }
+
+                }
+
+            });
+        }
+
+
+    }
+</script>
